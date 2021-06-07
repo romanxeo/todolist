@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {ChangeEvent, useState} from 'react';
 import './App.css';
 import {Todolist} from './Todolist';
 import {v1} from 'uuid';
@@ -15,9 +15,9 @@ function App() {
         {id: v1(), title: "GraphQL", isDone: false},
     ]);
 
-    const addTask =()=> {
-        let newTask = {id: v1(), title: "NEW", isDone: false};
-        setTasks([newTask,...tasks]);
+    const addTask =(newTitle:string)=> {
+        let newTask = {id: v1(), title: newTitle, isDone: false};
+        setTasks([newTask, ...tasks]);
     }
 
     function removeTask(id: string) {
@@ -30,10 +30,10 @@ function App() {
     let tasksForTodolist = tasks;
 
     if (filter === "active") {
-        tasksForTodolist = tasks.filter(t => t.isDone === false);
+        tasksForTodolist = tasks.filter(t => !t.isDone);
     }
     if (filter === "completed") {
-        tasksForTodolist = tasks.filter(t => t.isDone === true);
+        tasksForTodolist = tasks.filter(t => t.isDone);
     }
 
     function changeFilter(value: FilterValuesType) {
@@ -50,5 +50,4 @@ function App() {
         </div>
     );
 }
-
 export default App;
