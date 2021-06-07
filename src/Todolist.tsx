@@ -32,10 +32,9 @@ export function Todolist(props: PropsType) {
             }
         </ul>
         <div>
-            <Button callback = { () => props.changeFilter("all")} />
-            {/*<button onClick={ () => { props.changeFilter("all") } }>All</button>*/}
-            <button onClick={ () => { props.changeFilter("active") } }>Active</button>
-            <button onClick={ () => { props.changeFilter("completed") } }>Completed</button>
+            <Button callback = { () => props.changeFilter("all")} value = {'All'} />
+            <Button callback = { () => props.changeFilter("active")} value = {'Active'} />
+            <Button callback = { () => props.changeFilter("completed")} value = {'Completed'} />
         </div>
     </div>
 }
