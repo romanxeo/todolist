@@ -15,7 +15,15 @@ function App() {
         {id: v1(), title: "GraphQL1", isDone: false},
     ]);
 
-    const addTask =(newTitle:string)=> {
+    function isDoneTask(id: string) {
+        let findTask = tasks.find(t => t.id === id);
+        if (findTask) {
+            findTask.isDone = !findTask.isDone
+            setTasks([...tasks])
+        }
+    }
+
+    const addTask = (newTitle: string) => {
         let newTask = {id: v1(), title: newTitle, isDone: false};
         setTasks([newTask, ...tasks]);
     }
@@ -46,8 +54,11 @@ function App() {
                       tasks={tasksForTodolist}
                       removeTask={removeTask}
                       changeFilter={changeFilter}
-                      addTask = {addTask}/>
+                      addTask={addTask}
+                      isDoneTask={isDoneTask}
+                      filter={filter}/>
         </div>
     );
 }
+
 export default App;

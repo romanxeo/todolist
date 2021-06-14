@@ -1,15 +1,21 @@
 import React from 'react';
+import {FilterValuesType} from "../App";
 
-type propsType = {
-    callback: ()=>void
-    value: string
+type PropsType = {
+    value: FilterValuesType
+    filter: FilterValuesType
+    changeFilter: (value: FilterValuesType) => void
 }
 
-export const Button = (props: propsType) => {
-    const onClickHandler = () => {
-        props.callback()
+export function Button(props: PropsType) {
+
+    const onFilterClickHandler = (filterValue: FilterValuesType) => {
+        props.changeFilter(filterValue);
     }
+
     return (
-        <button onClick={onClickHandler}>{props.value}</button>
+        <>
+            <button className = {props.filter === props.value?'active-filter':''} onClick={ () => onFilterClickHandler(props.value) }>{props.value}</button>
+        </>
     )
 }
