@@ -4,13 +4,14 @@ import {FilterValuesType} from "../App";
 type PropsType = {
     value: FilterValuesType
     filter: FilterValuesType
-    changeFilter: (value: FilterValuesType) => void
+    todoListID: string
+    changeTodoListFilter: (value: FilterValuesType, todoListID: string) => void
 }
 
 export function Button(props: PropsType) {
 
     const onFilterClickHandler = (filterValue: FilterValuesType) => {
-        props.changeFilter(filterValue);
+        props.changeTodoListFilter(filterValue, props.todoListID);
     }
 
     return (

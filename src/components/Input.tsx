@@ -1,12 +1,13 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 
 type inputType = {
-    callback: (newTitle: string) => void
+    addTask: (newTitle: string, todoListID: string) => void
+    todoListID: string
 }
 
 export const Input = (props: inputType) => {
 
-    let [title, setTitle] = useState('')
+    let [title, setTitle] = useState<string>('')
     let [error, setError] = useState<null|string>(null)
 
     const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -22,7 +23,7 @@ export const Input = (props: inputType) => {
 
     const onClickHandler = () => {
         if (title.trim()) {
-            props.callback(title.trim())
+            props.addTask(title.trim(), props.todoListID)
         } else {
             setError('title is required')
         }

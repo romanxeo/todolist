@@ -1,22 +1,20 @@
 import React, {ChangeEvent} from 'react';
-import {FilterValuesType} from './App';
+import {FilterValuesType, TaskType} from './App';
 import {Button} from './components/Button';
 import {Input} from './components/Input';
 
-type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
+
 
 type PropsType = {
     title: string
     tasks: Array<TaskType>
-    removeTask: (taskId: string) => void
-    changeFilter: (value: FilterValuesType) => void
-    addTask: (newTitle: string) => void
-    isDoneTask: (id: string) => void
-    filter: FilterValuesType
+    todoListID: string
+    todoListFilter: FilterValuesType
+    removeTask: (taskID: string, todoListID: string) => void
+    changeTodoListFilter: (value: FilterValuesType, todoListID: string) => void
+    addTask: (newTitle: string, todoListID: string) => void
+    isDoneTask: (taskID: string, todoListID: string) => void
+    removeTodoList: (todoListID: string) => void
 }
 
 export function Todolist(props: PropsType) {
@@ -35,15 +33,22 @@ export function Todolist(props: PropsType) {
         props.changeFilter(filterValue);
     }*/
 
+    const removeTodoListHandler = () => {
+        props.removeTodoList(props.todoListID)
+    }
+
     return <div>
-        <h3>{props.title}</h3>
-        <Input callback={(newTitle: string) => props.addTask(newTitle)}/>
+        <h3>{props.title} <button onClick={removeTodoListHandler}>X</button></h3>
+
+        <Input addTask={props.addTask} todoListID={props.todoListID}/>
+
         <ul>
             {props.tasks.map((t) => {
-                const removeTaskHandler = () => props.removeTask(t.id)
+
+                const removeTaskHandler = () => props.removeTask(t.id, props.todoListID)
 
                 const isDoneHandler = (event: ChangeEvent<HTMLInputElement>) => {
-                    props.isDoneTask(t.id)
+                    props.isDoneTask(t.id, props.todoListID)
                 }
 
                 return (
@@ -68,9 +73,9 @@ export function Todolist(props: PropsType) {
             <Button callback={changeFilterHandlerCompleted} value={'Completed'}/>*/}
 
 
-            <Button value = {'all'} filter = {props.filter} changeFilter = {props.changeFilter}/>
-            <Button value = {'active'} filter = {props.filter} changeFilter = {props.changeFilter}/>
-            <Button value = {'completed'} filter = {props.filter} changeFilter = {props.changeFilter}/>
+            <Button value = {'all'} filter = {props.todoListFilter} todoListID={props.todoListID} changeTodoListFilter = {props.changeTodoListFilter}/>
+            <Button value = {'active'} filter = {props.todoListFilter} todoListID={props.todoListID} changeTodoListFilter = {props.changeTodoListFilter}/>
+            <Button value = {'completed'} filter = {props.todoListFilter} todoListID={props.todoListID} changeTodoListFilter = {props.changeTodoListFilter}/>
         </div>
     </div>
 }
