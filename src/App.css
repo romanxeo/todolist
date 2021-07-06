@@ -1,11 +1,14 @@
+
 .App {
-  padding: 30px;
-  display: flex;
+  /*padding: 30px;*/
+ /* display: flex;*/
+  background-color: lightgray;
 }
 
 .App > div {
-  margin-right: 50px;
+ /* margin-right: 50px;*/
 }
+
 
 .error {
   border: red 1px solid;
@@ -20,5 +23,6 @@
 }
 
 .is-done {
-  opacity: 0.5;
+  /*opacity: 0.5;*/
+  color: #BBBBBB;
 }
