@@ -54,9 +54,6 @@ function EditableSpan(props: EditableSpanPropsType) {
                        onKeyPress={onKeyPressHandler}
             />
 
-
-
-
             : <span onDoubleClick={onEditMode}>{props.title}</span>
     )
 
