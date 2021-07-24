@@ -153,7 +153,7 @@ test('property with todolistId should be deleted', () => {
             { id: "3", title: "React", isDone: false }
         ],
         "todolistId2": [
-            { id: "1", title: "breaded", isDone: false },
+            { id: "1", title: "breadeded", isDone: false },
             { id: "2", title: "milk", isDone: true },
             { id: "3", title: "tea", isDone: false }
         ]
