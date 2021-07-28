@@ -1,10 +1,18 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useReducer, useState} from 'react';
 import './App.css';
 import {Todolist} from './Todolist';
 import {v1} from 'uuid';
 import {AddItemForm} from "./components/AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
+import {
+    AddTodoListAC,
+    ChangeTodoListFilterAC,
+    ChangeTodoListTitleAC,
+    RemoveTodoListAC,
+    todolistsReducer
+} from "./store/todolists-reducer";
+import {addTaskAC, changeTaskStatusAC, changeTitleTaskAC, removeTaskAC, tasksReducer} from './store/tasks-reducer';
 
 export type FilterValuesType = "all" | "active" | "completed";
 
@@ -24,16 +32,17 @@ export type TasksStateType = {
     [key: string]: Array<TaskType>
 }
 
-function App() {
+function AppWithReducers() {
 
     const todoListID_1 = v1()
     const todoListID_2 = v1()
 
-    const [todoLists, setTodoLists] = useState<Array<TodoListType>>([
+    const [todoLists, dispatchTodolists] = useReducer(todolistsReducer, [
         {id: todoListID_1, title: 'What to learn', filter: "all"},
         {id: todoListID_2, title: 'What to buy', filter: "all"},
     ])
-    const [tasks, setTasks] = useState<TasksStateType>({
+
+    const [tasks, dispatchTasks] = useReducer(tasksReducer,{
         [todoListID_1]: [{id: v1(), title: "HTML&CSS", isDone: true},
             {id: v1(), title: "JS", isDone: true},
             {id: v1(), title: "ReactJS", isDone: false},
@@ -44,62 +53,58 @@ function App() {
             {id: v1(), title: "scooter", isDone: false}],
     })
 
-    function isDoneTask(taskID: string, isDoneStatus: boolean, todoListID: string) {
-        const findTask = tasks[todoListID].find(t => t.id === taskID);
-        if (findTask) {
-            findTask.isDone = !findTask.isDone
-            setTasks({...tasks})
-        }
-    }
-
-    function changeTitleTask(taskID: string, title: string, todoListID: string) {
-        const findTask = tasks[todoListID].find(t => t.id === taskID);
-        if (findTask) {
-            findTask.title = title
-            setTasks({...tasks})
-        }
-    }
-
-    function changeTitleTodoList(title: string, todoListID: string) {
-        const updatedTodoLists = todoLists.map(tl => {
-            if (tl.id === todoListID ) {
-                return {...tl, title: title}
-            }
-            return tl
-        } )
-        setTodoLists(updatedTodoLists)
-    }
-
-    function addTask(newTitle: string, todoListID: string) {
-        const newTask = {id: v1(), title: newTitle, isDone: false};
-        tasks[todoListID] = [newTask, ...tasks[todoListID]]
-        setTasks({...tasks});
-    }
-
-    function removeTask(taskID: string, todoListID: string) {
-        tasks[todoListID] = tasks[todoListID].filter(t => t.id !== taskID);
-        setTasks({...tasks});
-    }
-
-    function changeTodoListFilter(value: FilterValuesType, todoListID: string) {
-        setTodoLists(todoLists.map(tl => tl.id === todoListID ? {...tl, filter: value} : tl));
+    function addTodoList(title: string) {
+        //создаем экшн и диспатчим его через юзредюсер в редюсер тудулиста
+        const action = AddTodoListAC(title)
+        dispatchTodolists(action)
+        dispatchTasks(action)
     }
 
     function removeTodoList(todoListID: string) {
-        setTodoLists(todoLists.filter(tl => tl.id !== todoListID))
-        delete tasks[todoListID]
+        //создаем экшн и диспатчим его через юзредюсер в редюсер тудулиста
+        const action = RemoveTodoListAC(todoListID);
+        dispatchTodolists(action)
+        dispatchTasks(action)
     }
 
-    function addTodoList(title: string) {
-        const newTodoListID = v1()
-        const newTodoList: TodoListType = {
-            id: newTodoListID,
-            title: title,
-            filter: 'all'
-        }
-        setTodoLists([...todoLists, newTodoList])
-        setTasks({...tasks, [newTodoListID]: []})
+    function changeTitleTodoList(title: string, todoListID: string) {
+        //создаем экшн и диспатчим его через юзредюсер в редюсер тудулиста
+        const action = ChangeTodoListTitleAC(todoListID, title)
+        dispatchTodolists(action)
     }
+
+    function changeTodoListFilter(value: FilterValuesType, todoListID: string) {
+        //создаем экшн и диспатчим его через юзредюсер в редюсер тудулиста
+        const action = ChangeTodoListFilterAC(value, todoListID)
+        dispatchTodolists(action)
+    }
+
+
+
+    function addTask(newTitle: string, todoListID: string) {
+        //создаем экшн и диспатчим его через юзредюсер в редюсер таски
+        const action = addTaskAC(newTitle, todoListID)
+        dispatchTasks(action)
+    }
+
+    function removeTask(taskID: string, todoListID: string) {
+        //создаем экшн и диспатчим его через юзредюсер в редюсер таски
+        const action = removeTaskAC(taskID, todoListID)
+        dispatchTasks(action)
+    }
+
+    function isDoneTask(taskID: string, isDoneStatus: boolean, todoListID: string) {
+        //создаем экшн и диспатчим его через юзредюсер в редюсер таски
+        const action = changeTaskStatusAC(taskID, isDoneStatus, todoListID)
+        dispatchTasks(action)
+    }
+
+    function changeTitleTask(taskID: string, title: string, todoListID: string) {
+        //создаем экшн и диспатчим его через юзредюсер в редюсер таски
+        const action = changeTitleTaskAC(todoListID, taskID, title)
+        dispatchTasks(action)
+    }
+
 
     const todoListsComponents = todoLists.map(tl => {
         let tasksForTodolist = tasks[tl.id];
@@ -141,7 +146,7 @@ function App() {
                         <Menu/>
                     </IconButton>
                     <Typography variant='h6'>
-                        Todolists
+                        Todolists AppWithReducer
                     </Typography>
                     <Button variant='outlined'
                             color='inherit'>Login</Button>
@@ -160,4 +165,4 @@ function App() {
     );
 }
 
-export default App;
+export default AppWithReducers;
