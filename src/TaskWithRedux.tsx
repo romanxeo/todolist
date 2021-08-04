@@ -5,7 +5,7 @@ import EditableSpan from "./components/EditableSpan";
 import {Delete} from "@material-ui/icons";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./store/store";
-import {TaskType} from "./App";
+import {TaskType} from "./OLD/App";
 import './App.css';
 
 export type TaskWithReduxType = {
@@ -13,7 +13,7 @@ export type TaskWithReduxType = {
     taskID: string
 }
 
-export function TaskWithRedux(props: TaskWithReduxType) {
+export const TaskWithRedux = React.memo(function(props: TaskWithReduxType) {
 
     let task = useSelector<AppRootStateType, TaskType>(state => state.tasks[props.todoListID]
         .filter(tasks => tasks.id === props.taskID)[0])
@@ -56,4 +56,4 @@ export function TaskWithRedux(props: TaskWithReduxType) {
         </div>
     )
 
-}
+})

@@ -5,7 +5,7 @@ import {AppRootStateType} from "./store/store";
 import {addTaskAC} from "./store/tasks-reducer";
 import {ChangeTodoListFilterAC, ChangeTodoListTitleAC, RemoveTodoListAC} from "./store/todolists-reducer";
 
-import {FilterValuesType, TaskType} from './App';
+import {FilterValuesType, TaskType} from './OLD/App';
 
 import {IconButton} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";

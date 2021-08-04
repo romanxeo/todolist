@@ -1,8 +1,8 @@
 import React, {ChangeEvent, useReducer, useState} from 'react';
-import './App.css';
+import '../App.css';
 import {Todolist} from './Todolist';
 import {v1} from 'uuid';
-import {AddItemForm} from "./components/AddItemForm";
+import {AddItemForm} from "../components/AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
 import {
@@ -11,8 +11,8 @@ import {
     ChangeTodoListTitleAC,
     RemoveTodoListAC,
     todolistsReducer
-} from "./store/todolists-reducer";
-import {addTaskAC, changeTaskStatusAC, changeTitleTaskAC, removeTaskAC, tasksReducer} from './store/tasks-reducer';
+} from "../store/todolists-reducer";
+import {addTaskAC, changeTaskStatusAC, changeTitleTaskAC, removeTaskAC, tasksReducer} from '../store/tasks-reducer';
 
 export type FilterValuesType = "all" | "active" | "completed";
 

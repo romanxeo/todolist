@@ -1,5 +1,5 @@
 import React from 'react';
-import {FilterValuesType} from "../App";
+import {FilterValuesType} from "../OLD/App";
 import {Button} from "@material-ui/core";
 
 type PropsType = {

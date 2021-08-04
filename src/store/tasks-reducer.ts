@@ -1,4 +1,4 @@
-import {FilterValuesType, TasksStateType, TodoListType} from "../App";
+import {FilterValuesType, TasksStateType, TodoListType} from "../OLD/App";
 import {v1} from "uuid";
 import {AddTodoListAT, RemoveTodoListAT} from "./todolists-reducer";
 
