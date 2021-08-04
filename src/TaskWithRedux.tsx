@@ -19,8 +19,6 @@ export function TaskWithRedux(props: TaskWithReduxType) {
         .filter(tasks => tasks.id === props.taskID)[0])
     const dispatch = useDispatch()
 
-    console.log(task)
-
     function removeTask() {
         //создаем экшн и диспатчим его через юзредюсер в редюсер таски
         const action = removeTaskAC(task.id, props.todoListID)

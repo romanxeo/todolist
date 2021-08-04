@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 
 import './App.css';
 
@@ -36,11 +36,11 @@ function AppWithReduxOne() {
     const dispatch = useDispatch()
 
 
-    function addTodoList(title: string) {
+    const addTodoList = useCallback((title: string) => {
         //создаем экшн и диспатчим его через юзредюсер в редюсер тудулиста
         const action = AddTodoListAC(title)
         dispatch(action)
-    }
+    }, [])
 
     const todoListsComponents = todoLists.map(tl => {
 

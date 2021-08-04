@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./store/store";
@@ -22,21 +22,20 @@ type PropsType = {
     todoListID: string
 }
 
-export function TodolistWithReduxTwo(props: PropsType) {
+export const TodolistWithReduxTwo = React.memo(function(props: PropsType) {
 
     let todolist = useSelector<AppRootStateType, TodoListType>(state => state.todolists
         .filter(todolist => todolist.id === props.todoListID)[0])
     let tasks = useSelector<AppRootStateType, Array<TaskType>>(state => state.tasks[props.todoListID])
     const dispatch = useDispatch()
 
-    console.log(todolist)
-    console.log(tasks)
+    console.log('todolist')
 
-    function addTask(newTitle: string) {
+    const addTask = useCallback((newTitle: string) => {
         //создаем экшн и диспатчим его через юзредюсер в редюсер таски
         const action = addTaskAC(props.todoListID, newTitle)
         dispatch(action)
-    }
+    }, [])
 
     function changeTodoListTitle(title: string) {
         //создаем экшн и диспатчим его через юзредюсер в редюсер тудулиста
@@ -92,4 +91,4 @@ export function TodolistWithReduxTwo(props: PropsType) {
             <Buttons value = {'completed'} filter = {todolist.filter} todoListID={props.todoListID} changeTodoListFilter = {changeTodoListFilter}/>
         </div>
     </div>
-}
+})
