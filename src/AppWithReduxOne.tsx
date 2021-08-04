@@ -10,7 +10,7 @@ import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography}
 import {Menu} from "@material-ui/icons";
 
 import {AddItemForm} from "./components/AddItemForm";
-import {TodolistWithReduxOne} from "./TodolistWithReduxOne";
+import {TodolistWithReduxTwo} from "./TodolistWithReduxTwo";
 
 export type FilterValuesType = "all" | "active" | "completed";
 
@@ -47,7 +47,7 @@ function AppWithReduxOne() {
         return (
             <Grid item key={tl.id}>
                 <Paper style={{padding: '10px'}} elevation={4}>
-                    <TodolistWithReduxOne todoListID={tl.id}/>
+                    <TodolistWithReduxTwo todoListID={tl.id}/>
                 </Paper>
             </Grid>
 
@@ -62,7 +62,7 @@ function AppWithReduxOne() {
                         <Menu/>
                     </IconButton>
                     <Typography variant='h6'>
-                        Todolists AppWithReduxOne
+                        Todolists AppWithReduxOne TodolistTwo
                     </Typography>
                     <Button variant='outlined'
                             color='inherit'>Login</Button>
