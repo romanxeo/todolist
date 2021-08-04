@@ -53,37 +53,37 @@ export function Todolist(props: PropsType) {
 
         <AddItemForm addItem={addTask}/>
 
-            {props.tasks.map((t) => {
+        {props.tasks.map((t) => {
 
-                const removeTaskHandler = () => props.removeTask(t.id, props.todoListID)
+            const removeTaskHandler = () => props.removeTask(t.id, props.todoListID)
 
-                const isDoneHandler = (event: ChangeEvent<HTMLInputElement>) => {
-                    props.isDoneTask(t.id, !t.isDone, props.todoListID)
-                }
+            const isDoneHandler = (event: ChangeEvent<HTMLInputElement>) => {
+                props.isDoneTask(t.id, !t.isDone, props.todoListID)
+            }
 
-                const changeTitleTask = (title: string) => {
-                    props.changeTitleTask(t.id, title, props.todoListID)
-                }
+            const changeTitleTask = (title: string) => {
+                props.changeTitleTask(t.id, title, props.todoListID)
+            }
 
-                return (
-                    <div key={t.id} className={t.isDone === true?'is-done':''}>
+            return (
+                <div key={t.id} className={t.isDone === true?'is-done':''}>
 
-                        <Checkbox onChange={isDoneHandler}
-                                  checked={t.isDone}
-                                  color={'primary'}></Checkbox>
+                    <Checkbox onChange={isDoneHandler}
+                              checked={t.isDone}
+                              color={'primary'}></Checkbox>
 
-                        <EditableSpan title={t.title} changeTitleTask={changeTitleTask}/>
+                    <EditableSpan title={t.title} changeTitleTask={changeTitleTask}/>
 
-                        <IconButton onClick={ removeTaskHandler }
-                                    color={'primary'}
-                                    size={'small'}
-                                    style={{color: '#444444', marginLeft: '4px'}}>
-                            <Delete/>
-                        </IconButton>
+                    <IconButton onClick={ removeTaskHandler }
+                                color={'primary'}
+                                size={'small'}
+                                style={{color: '#444444', marginLeft: '4px'}}>
+                        <Delete/>
+                    </IconButton>
 
-                    </div>
-                )
-            })}
+                </div>
+            )
+        })}
 
         <div>
 

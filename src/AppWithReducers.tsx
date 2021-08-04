@@ -75,7 +75,7 @@ function AppWithReducers() {
 
     function changeTodoListFilter(value: FilterValuesType, todoListID: string) {
         //создаем экшн и диспатчим его через юзредюсер в редюсер тудулиста
-        const action = ChangeTodoListFilterAC(value, todoListID)
+        const action = ChangeTodoListFilterAC(todoListID, value)
         dispatchTodolists(action)
     }
 
