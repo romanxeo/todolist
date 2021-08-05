@@ -35,21 +35,21 @@ export const TodolistWithReduxTwo = React.memo(function(props: PropsType) {
         //создаем экшн и диспатчим его через юзредюсер в редюсер таски
         const action = addTaskAC(props.todoListID, newTitle)
         dispatch(action)
-    }, [])
+    }, [dispatch])
 
-    function changeTodoListTitle(title: string) {
+    const changeTodoListTitle = useCallback((title: string) => {
         //создаем экшн и диспатчим его через юзредюсер в редюсер тудулиста
         const action = ChangeTodoListTitleAC(props.todoListID, title)
         dispatch(action)
-    }
+    }, [dispatch])
 
-    function changeTodoListFilter(value: FilterValuesType) {
+    const changeTodoListFilter = useCallback((value: FilterValuesType) => {
         //создаем экшн и диспатчим его через юзредюсер в редюсер тудулиста
         const action = ChangeTodoListFilterAC(props.todoListID, value)
         dispatch(action)
-    }
+    }, [dispatch])
 
-    function removeTodoList() {
+    const removeTodoList = () => {
         //создаем экшн и диспатчим его через юзредюсер в редюсер тудулиста
         const action = RemoveTodoListAC(props.todoListID);
         dispatch(action)

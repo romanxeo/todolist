@@ -32,6 +32,8 @@ export type TasksStateType = {
 
 function AppWithReduxOne() {
 
+    console.log('app')
+
     let todoLists = useSelector<AppRootStateType, Array<TodoListType>>(state => state.todolists)
     const dispatch = useDispatch()
 
@@ -40,7 +42,7 @@ function AppWithReduxOne() {
         //создаем экшн и диспатчим его через юзредюсер в редюсер тудулиста
         const action = AddTodoListAC(title)
         dispatch(action)
-    }, [])
+    }, [dispatch])
 
     const todoListsComponents = todoLists.map(tl => {
 

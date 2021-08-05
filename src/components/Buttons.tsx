@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {FilterValuesType} from "../OLD/App";
 import {Button} from "@material-ui/core";
 
@@ -9,11 +9,13 @@ type PropsType = {
     changeTodoListFilter: (value: FilterValuesType, todoListID: string) => void
 }
 
-export function Buttons(props: PropsType) {
+export const Buttons = React.memo(function(props: PropsType) {
 
-    const onFilterClickHandler = (filterValue: FilterValuesType) => {
+    console.log('button')
+
+    const onFilterClickHandler = useCallback((filterValue: FilterValuesType) => {
         props.changeTodoListFilter(filterValue, props.todoListID);
-    }
+    }, [])
 
     return (
         <>
@@ -31,4 +33,4 @@ export function Buttons(props: PropsType) {
 
         </>
     )
-}
+})

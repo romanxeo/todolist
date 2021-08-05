@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from 'react';
+import React, {ChangeEvent, useCallback} from 'react';
 import {changeTaskStatusAC, changeTitleTaskAC, removeTaskAC} from "./store/tasks-reducer";
 import {Checkbox, IconButton} from "@material-ui/core";
 import EditableSpan from "./components/EditableSpan";
@@ -15,6 +15,8 @@ export type TaskWithReduxType = {
 
 export const TaskWithRedux = React.memo(function(props: TaskWithReduxType) {
 
+    console.log('task')
+
     let task = useSelector<AppRootStateType, TaskType>(state => state.tasks[props.todoListID]
         .filter(tasks => tasks.id === props.taskID)[0])
     const dispatch = useDispatch()
@@ -25,11 +27,11 @@ export const TaskWithRedux = React.memo(function(props: TaskWithReduxType) {
         dispatch(action)
     }
 
-    function changeTitleTask(title: string) {
+    const changeTitleTask = useCallback((title: string) => {
         //создаем экшн и диспатчим его через юзредюсер в редюсер таски
         const action = changeTitleTaskAC(props.todoListID, task.id, title)
         dispatch(action)
-    }
+    }, [dispatch])
 
     function isDoneTask(event: ChangeEvent<HTMLInputElement>) {
         //создаем экшн и диспатчим его через юзредюсер в редюсер таски

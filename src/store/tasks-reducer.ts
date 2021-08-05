@@ -58,13 +58,19 @@ export const tasksReducer = (state: TasksStateType = initialState, action: actio
             })
             return copyState*/
 
-            return {
+/*            return {
                     ...state,
                     [action.todoListID]: state[action.todoListID].map(task => {
                         if (task.id === action.taskID) return {...task, isDone: action.isDoneStatus}
                         else return task
                 })
-            }
+            }*/
+
+            let todolistTasks = state[action.todoListID]
+            let newTasksArray = todolistTasks
+                .map(t => t.id === action.taskID ? {...t, isDone: action.isDoneStatus} : t)
+            state[action.todoListID] = newTasksArray
+            return ({...state})
 
 /*            let todolistTasks = state[action.todoListID];
             // найдём нужную таску:
@@ -84,13 +90,20 @@ export const tasksReducer = (state: TasksStateType = initialState, action: actio
                         return copyState*/
 
 
-            return {
+/*            return {
                 ...state,
                 [action.todoListID]: state[action.todoListID].map(task => {
                     if (task.id === action.taskID) return {...task, title: action.title}
                     else return task
                 })
-            }
+            }*/
+
+            let todolistTasks = state[action.todoListID]
+            let newTasksArray = todolistTasks
+                .map(t => t.id === action.taskID ? {...t, title: action.title} : t)
+            state[action.todoListID] = newTasksArray
+            return ({...state})
+
         }
         case "ADD-TODOLIST": {
             let copyState = {...state, [action.todoListID]: []}
