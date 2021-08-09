@@ -14,7 +14,9 @@ export const AddItemForm = React.memo(function(props: AddItemFormPropsType) {
     let [error, setError] = useState<null|string>(null)
 
     const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        setError(null)
+        if (error !== null ){
+            setError(null)
+        }
         setTitle(event.currentTarget.value)
     }
 

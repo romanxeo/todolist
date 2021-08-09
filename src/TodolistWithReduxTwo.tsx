@@ -1,9 +1,13 @@
-import React, { useCallback } from 'react';
+import React, {FC, ReactElement, useCallback} from 'react';
 
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./store/store";
 import {addTaskAC} from "./store/tasks-reducer";
-import {ChangeTodoListFilterAC, ChangeTodoListTitleAC, RemoveTodoListAC} from "./store/todolists-reducer";
+import {
+  ChangeTodoListFilterAC,
+  ChangeTodoListTitleAC,
+  RemoveTodoListAC
+} from "./store/todolists-reducer";
 
 import {FilterValuesType, TaskType} from './OLD/App';
 
@@ -17,78 +21,106 @@ import {Buttons} from './components/Buttons';
 import EditableSpan from "./components/EditableSpan";
 import {TaskWithRedux} from "./TaskWithRedux";
 
-
 type PropsType = {
-    todoListID: string
-}
+  todoListID: string;
+};
 
-export const TodolistWithReduxTwo = React.memo(function(props: PropsType) {
+export const TodolistWithReduxTwo: FC<PropsType> = React.memo(({
+  todoListID,
+}): ReactElement | null => {
+  const dispatch = useDispatch()
 
-    let todolist = useSelector<AppRootStateType, TodoListType>(state => state.todolists
-        .filter(todolist => todolist.id === props.todoListID)[0])
-    let tasks = useSelector<AppRootStateType, Array<TaskType>>(state => state.tasks[props.todoListID])
-    const dispatch = useDispatch()
+  const getTodoLists = (state: any) => state.todolists
+    .filter((todolist: any) => todolist.id === todoListID)[0];
+  const todolist = useSelector((state: any) => getTodoLists(state));
+  const tasks = useSelector<AppRootStateType, Array<TaskType>>(state => state.tasks[todoListID])
 
-    console.log('todolist')
+  console.log('todolist')
 
-    const addTask = useCallback((newTitle: string) => {
-        //создаем экшн и диспатчим его через юзредюсер в редюсер таски
-        const action = addTaskAC(props.todoListID, newTitle)
-        dispatch(action)
-    }, [dispatch])
+  const addTask = useCallback((newTitle: string) => {
+    //создаем экшн и диспатчим его через юзредюсер в редюсер таски
+    const action = addTaskAC(todoListID, newTitle)
+    dispatch(action)
+  }, [dispatch])
+  const changeTodoListTitle = useCallback((title: string) => {
+    //создаем экшн и диспатчим его через юзредюсер в редюсер тудулиста
+    const action = ChangeTodoListTitleAC(todoListID, title)
+    dispatch(action)
+  }, [todoListID])
+  const changeTodoListFilter = useCallback((value: FilterValuesType) => {
+    //создаем экшн и диспатчим его через юзредюсер в редюсер тудулиста
+    const action = ChangeTodoListFilterAC(todoListID, value)
+    dispatch(action)
+  }, [dispatch])
+  const removeTodoList = useCallback(() => {
+    //создаем экшн и диспатчим его через юзредюсер в редюсер тудулиста
+    const action = RemoveTodoListAC(todoListID);
+    dispatch(action)
+  }, [dispatch])
 
-    const changeTodoListTitle = useCallback((title: string) => {
-        //создаем экшн и диспатчим его через юзредюсер в редюсер тудулиста
-        const action = ChangeTodoListTitleAC(props.todoListID, title)
-        dispatch(action)
-    }, [dispatch])
+  const renderTasks = () => tasksForTodolist.map((t) => {
+    return (
+      <div key={t.id}>
+        <TaskWithRedux
+          todoListID={todoListID}
+          taskID={t.id}
+        />
+      </div>
+    )
+  })
 
-    const changeTodoListFilter = useCallback((value: FilterValuesType) => {
-        //создаем экшн и диспатчим его через юзредюсер в редюсер тудулиста
-        const action = ChangeTodoListFilterAC(props.todoListID, value)
-        dispatch(action)
-    }, [dispatch])
+  let tasksForTodolist = tasks;
 
-    const removeTodoList = () => {
-        //создаем экшн и диспатчим его через юзредюсер в редюсер тудулиста
-        const action = RemoveTodoListAC(props.todoListID);
-        dispatch(action)
-    }
+  if (todolist.filter === "active") {
+    tasksForTodolist = tasks.filter(t => !t.isDone);
+  }
+  if (todolist.filter === "completed") {
+    tasksForTodolist = tasks.filter(t => t.isDone);
+  }
 
-    let tasksForTodolist = tasks;
+  return (
+    <div>
+      <h3>
+        <EditableSpan
+          title={todolist.title}
+          changeTitleTask={changeTodoListTitle}
+        />
+        <IconButton
+          onClick={removeTodoList}
+          color={'primary'}
+          size={'small'}
+          style={{color: '#444444'}}
+        >
+          <Delete/>
+        </IconButton>
+      </h3>
+      <AddItemForm addItem={addTask}/>
 
-    if (todolist.filter === "active") {
-        tasksForTodolist = tasks.filter(t => !t.isDone);
-    }
-    if (todolist.filter === "completed") {
-        tasksForTodolist = tasks.filter(t => t.isDone);
-    }
+      {renderTasks()}
 
-    return <div>
-
-        <h3>
-            <EditableSpan title={todolist.title} changeTitleTask={changeTodoListTitle} />
-            <IconButton onClick={ removeTodoList }
-                        color={'primary'}
-                        size={'small'}
-                        style={{color: '#444444'}}
-            >
-                <Delete/>
-            </IconButton>
-        </h3>
-
-        <AddItemForm addItem={addTask}/>
-
-        {tasksForTodolist.map((t) => {
-            return  <div key={t.id}>
-                        <TaskWithRedux todoListID={props.todoListID} taskID={t.id}/>
-                    </div>
-        })}
-
-        <div>
-            <Buttons value = {'all'} filter = {todolist.filter} todoListID={props.todoListID} changeTodoListFilter = {changeTodoListFilter}/>
-            <Buttons value = {'active'} filter = {todolist.filter} todoListID={props.todoListID} changeTodoListFilter = {changeTodoListFilter}/>
-            <Buttons value = {'completed'} filter = {todolist.filter} todoListID={props.todoListID} changeTodoListFilter = {changeTodoListFilter}/>
-        </div>
+      <div>
+        <Buttons
+          value={'all'} filter={todolist.filter}
+          todoListID={todoListID}
+          changeTodoListFilter={changeTodoListFilter}
+        />
+        <Buttons
+          value={'active'} filter={todolist.filter}
+          todoListID={todoListID}
+          changeTodoListFilter={changeTodoListFilter}
+        />
+        <Buttons
+          value={'completed'} filter={todolist.filter}
+          todoListID={todoListID}
+          changeTodoListFilter={changeTodoListFilter}
+        />
+      </div>
     </div>
+  )
 })
+
+{/*{tasksForTodolist.map((t) => {*/}
+{/*  return <div key={t.id}>*/}
+{/*    <TaskWithRedux todoListID={props.todoListID} taskID={t.id}/>*/}
+{/*  </div>*/}
+{/*})}*/}

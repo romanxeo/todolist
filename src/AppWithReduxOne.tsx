@@ -30,7 +30,7 @@ export type TasksStateType = {
     [key: string]: Array<TaskType>
 }
 
-function AppWithReduxOne() {
+const AppWithReduxOne  = React.memo(   () => {
 
     console.log('app')
 
@@ -42,17 +42,15 @@ function AppWithReduxOne() {
         //создаем экшн и диспатчим его через юзредюсер в редюсер тудулиста
         const action = AddTodoListAC(title)
         dispatch(action)
-    }, [dispatch])
+    }, [])
 
     const todoListsComponents = todoLists.map(tl => {
-
         return (
             <Grid item key={tl.id}>
                 <Paper style={{padding: '10px'}} elevation={4}>
                     <TodolistWithReduxTwo todoListID={tl.id}/>
                 </Paper>
             </Grid>
-
         )
     })
 
@@ -81,6 +79,6 @@ function AppWithReduxOne() {
             </Container>
         </div>
     );
-}
+})
 
 export default AppWithReduxOne;
