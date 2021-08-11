@@ -62,7 +62,7 @@ const AppWithReduxOne  = React.memo(   () => {
                         <Menu/>
                     </IconButton>
                     <Typography variant='h6'>
-                        Todolists AppWithReduxOne TodolistTwo
+                        Todolists AppWithReduxOne TodolistTwo1
                     </Typography>
                     <Button variant='outlined'
                             color='inherit'>Login</Button>
