@@ -1,6 +1,6 @@
 import React, {ChangeEvent} from 'react';
 
-import {useDispatch, useSelector} from "react-redux";
+/*import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../store/store";
 import {addTaskAC, changeTaskStatusAC, changeTitleTaskAC, removeTaskAC} from "../store/tasks-reducer";
 import {ChangeTodoListFilterAC, ChangeTodoListTitleAC, RemoveTodoListAC} from "../store/todolists-reducer";
@@ -10,7 +10,7 @@ import {FilterValuesType, TaskType} from './App';
 import {Checkbox, IconButton} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
 
-import {TodoListType} from "../AppWithReduxOne";
+import {TodoListType} from "../App";
 
 import {AddItemForm} from '../components/AddItemForm';
 import {Buttons} from '../components/Buttons';
@@ -19,7 +19,8 @@ import EditableSpan from "../components/EditableSpan";
 
 type PropsType = {
     todoListID: string
-}
+}*/
+/*
 
 export function TodolistWithReduxOne(props: PropsType) {
 
@@ -128,4 +129,4 @@ export function TodolistWithReduxOne(props: PropsType) {
             <Buttons value = {'completed'} filter = {todolist.filter} todoListID={props.todoListID} changeTodoListFilter = {changeTodoListFilter}/>
         </div>
     </div>
-}
+}*/

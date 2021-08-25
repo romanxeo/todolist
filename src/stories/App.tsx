@@ -10,7 +10,7 @@ import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography}
 import {Menu} from "@material-ui/icons";
 
 import {AddItemForm} from "../components/AddItemForm";
-import {TodolistWithReduxTwo} from "../TodolistWithReduxTwo";
+import {Todolist} from "../Todolist";
 
 export type FilterValuesType = "all" | "active" | "completed";
 
@@ -30,7 +30,7 @@ export type TasksStateType = {
     [key: string]: Array<TaskType>
 }
 
-const AppWithReduxOne  = React.memo(   () => {
+const App  = React.memo(   () => {
 
     console.log('app')
 
@@ -48,7 +48,7 @@ const AppWithReduxOne  = React.memo(   () => {
         return (
             <Grid item key={tl.id}>
                 <Paper style={{padding: '10px'}} elevation={4}>
-                    <TodolistWithReduxTwo todoListID={tl.id}/>
+                    <Todolist todoListID={tl.id}/>
                 </Paper>
             </Grid>
         )
@@ -81,4 +81,4 @@ const AppWithReduxOne  = React.memo(   () => {
     );
 })
 
-export default AppWithReduxOne;
+export default App;

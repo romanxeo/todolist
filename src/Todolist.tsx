@@ -9,23 +9,21 @@ import {
   RemoveTodoListAC
 } from "./store/todolists-reducer";
 
-import {FilterValuesType, TaskType} from './OLD/App';
+import {FilterValuesType, TaskType} from './store/tasks-reducer';
 
 import {IconButton} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
 
-import {TodoListType} from "./AppWithReduxOne";
-
 import {AddItemForm} from './components/AddItemForm';
 import {Buttons} from './components/Buttons';
 import EditableSpan from "./components/EditableSpan";
-import {TaskWithRedux} from "./TaskWithRedux";
+import {Task} from "./Task";
 
 type PropsType = {
   todoListID: string;
 };
 
-export const TodolistWithReduxTwo: FC<PropsType> = React.memo(({
+export const Todolist: FC<PropsType> = React.memo(({
   todoListID,
 }): ReactElement | null => {
   const dispatch = useDispatch()
@@ -61,7 +59,7 @@ export const TodolistWithReduxTwo: FC<PropsType> = React.memo(({
   const renderTasks = () => tasksForTodolist.map((t) => {
     return (
       <div key={t.id}>
-        <TaskWithRedux
+        <Task
           todoListID={todoListID}
           taskID={t.id}
         />
@@ -121,6 +119,6 @@ export const TodolistWithReduxTwo: FC<PropsType> = React.memo(({
 
 {/*{tasksForTodolist.map((t) => {*/}
 {/*  return <div key={t.id}>*/}
-{/*    <TaskWithRedux todoListID={props.todoListID} taskID={t.id}/>*/}
+{/*    <Task todoListID={props.todoListID} taskID={t.id}/>*/}
 {/*  </div>*/}
 {/*})}*/}

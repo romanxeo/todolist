@@ -1,28 +1,25 @@
 import React, {ChangeEvent, useState} from 'react';
+
+
+/*
+
+
 import '../App.css';
 import {Todolist} from './Todolist';
 import {v1} from 'uuid';
 import {AddItemForm} from "../components/AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
+*/
 
-export type FilterValuesType = "all" | "active" | "completed";
 
-export type TodoListType = {
-    id: string
-    title: string
-    filter: FilterValuesType
-}
 
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
 
-export type TasksStateType = {
-    [key: string]: Array<TaskType>
-}
+
+/*
+
+
+
 
 function App() {
 
@@ -161,3 +158,5 @@ function App() {
 }
 
 export default App;
+
+*/

@@ -9,7 +9,7 @@ import EditableSpan from "../components/EditableSpan";
 import {Delete} from "@material-ui/icons";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../store/store";
-import {TaskType} from "../OLD/App";
+import {TaskType} from "../store/tasks-reducer";
 import '../App.css';
 
 export type TaskWithReduxType = {
@@ -17,7 +17,7 @@ export type TaskWithReduxType = {
   taskID: string
 }
 
-export const TaskWithRedux = React.memo(function (props: TaskWithReduxType) {
+export const Task = React.memo(function (props: TaskWithReduxType) {
 
   console.log('task')
 

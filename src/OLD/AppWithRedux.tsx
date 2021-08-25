@@ -1,5 +1,5 @@
 import React, {ChangeEvent, useReducer, useState} from 'react';
-import '../App.css';
+/*import '../App.css';
 import {Todolist} from './Todolist';
 import {AddItemForm} from "../components/AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
@@ -17,8 +17,9 @@ import {
     removeTaskAC
 } from '../store/tasks-reducer';
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../store/store";
+import {AppRootStateType} from "../store/store";*/
 
+/*
 export type FilterValuesType = "all" | "active" | "completed";
 
 export type TodoListType = {
@@ -39,7 +40,7 @@ export type TasksStateType = {
 
 function AppWithRedux() {
 
-    /*    let todoListID_1 = v1()
+    /!*    let todoListID_1 = v1()
         let todoListID_2 = v1()
         let [todoLists, dispatchTodolists] = useReducer(todolistsReducer, [
             {id: todoListID_1, title: 'What to learn', filter: "all"},
@@ -55,7 +56,7 @@ function AppWithRedux() {
                 {id: v1(), title: "notebook", isDone: false},
                 {id: v1(), title: "scooter", isDone: false}],
         })
-        */
+        *!/
 
     let todoLists = useSelector<AppRootStateType, Array<TodoListType>>(state => state.todolists)
     let tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
@@ -172,4 +173,4 @@ function AppWithRedux() {
     );
 }
 
-export default AppWithRedux;
+export default AppWithRedux;*/

@@ -1,4 +1,4 @@
-import {FilterValuesType, TasksStateType, TodoListType} from "../OLD/App";
+import {FilterValuesType, TasksStateType, TodoListType} from "../store/tasks-reducer";
 import {v1} from "uuid";
 
 export type RemoveTodoListAT = {

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import {FilterValuesType} from "../OLD/App";
+import {FilterValuesType} from "../store/tasks-reducer";
 import {Button} from "@material-ui/core";
 
 type PropsType = {

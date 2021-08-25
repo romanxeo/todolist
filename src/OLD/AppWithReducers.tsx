@@ -1,4 +1,5 @@
 import React, {ChangeEvent, useReducer, useState} from 'react';
+/*
 import '../App.css';
 import {Todolist} from './Todolist';
 import {v1} from 'uuid';
@@ -13,7 +14,9 @@ import {
     todolistsReducer
 } from "../store/todolists-reducer";
 import {addTaskAC, changeTaskStatusAC, changeTitleTaskAC, removeTaskAC, tasksReducer} from '../store/tasks-reducer';
+*/
 
+/*
 export type FilterValuesType = "all" | "active" | "completed";
 
 export type TodoListType = {
@@ -166,3 +169,4 @@ function AppWithReducers() {
 }
 
 export default AppWithReducers;
+*/

@@ -1,6 +1,23 @@
-import {FilterValuesType, TasksStateType, TodoListType} from "../OLD/App";
 import {v1} from "uuid";
 import {AddTodoListAT, RemoveTodoListAT} from "./todolists-reducer";
+
+export type TodoListType = {
+  id: string
+  title: string
+  filter: FilterValuesType
+}
+
+export type TaskType = {
+  id: string
+  title: string
+  isDone: boolean
+}
+
+export type FilterValuesType = "all" | "active" | "completed";
+
+export type TasksStateType = {
+  [key: string]: Array<TaskType>
+}
 
 export type removeTaskAT = {
   type: "REMOVE-TASK"
