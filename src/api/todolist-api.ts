@@ -22,6 +22,40 @@ type CommonResponseType<T = {}> = {
   resultCode: number
 }
 
+type ResponseType<T = {}> = {
+  resultCode: number
+  messages: Array<string>
+  data: T
+}
+
+type TaskType= {
+  description: string
+  title: string
+  status: number
+  priority: number
+  startDate: string
+  deadline: string
+  id: string
+  todoListId: string
+  order: number
+  addedDate: string
+}
+
+type UpdateTaskModelType = {
+  title: string
+  description: string
+  status: number
+  priority: number
+  startDate: string
+  deadline: string
+}
+
+type GetTasksResponse = {
+  error: string | null
+  totalCount: number
+  items: TaskType[]
+}
+
 export const todolistAPI = {
   GetTodolists() {
     const promise = instance.get<Array<TodolistType>>('todo-lists')
@@ -40,6 +74,26 @@ export const todolistAPI = {
 
   UpdateTodolistTitle(todolistId: string, title: string) {
     const promise = instance.put<CommonResponseType>(`todo-lists/${todolistId}`, {title: title})
+    return promise
+  },
+
+  GetTasks(todolistId: string) {
+    const promise = instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`)
+    return promise
+  },
+
+  CreateTask(todolistId: string, title: string) {
+    const promise = instance.post<ResponseType<TaskType>>(`todo-lists/${todolistId}/tasks`, {title: title})
+    return promise
+  },
+
+  DeleteTask(todolistId: string, taskId: string) {
+    const promise = instance.delete<ResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
+    return promise
+  },
+
+  UpdateTaskTitle(todolistId: string, taskId: string, model: UpdateTaskModelType) {
+    const promise = instance.put<ResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
     return promise
   },
 }
