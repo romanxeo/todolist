@@ -1,4 +1,5 @@
 import React, {ChangeEvent, useCallback} from 'react';
+/*
 import {
   changeTaskStatusAC,
   changeTitleTaskAC,
@@ -62,4 +63,4 @@ export const Task = React.memo(function (props: TaskWithReduxType) {
     </div>
   )
 
-})
+})*/

@@ -1,4 +1,5 @@
 import React from 'react';
+/*
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import {action} from "@storybook/addon-actions"
 import { Task } from './Task';
@@ -26,3 +27,4 @@ TaskStoriesPrimary.args = {
   todoListID: 'todolistId1',
   taskID: '1'
 };
+*/

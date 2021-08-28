@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+/*
 import {todolistAPI} from "../api/todolist-api";
 
 export default {
@@ -66,3 +67,4 @@ export const UpdateTodolistTitle = () => {
 
   return <div> {JSON.stringify(state)}</div>
 }
+*/

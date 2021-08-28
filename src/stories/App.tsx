@@ -1,4 +1,5 @@
 import React, {useCallback} from 'react';
+/*
 
 import '../App.css';
 
@@ -81,4 +82,4 @@ const App  = React.memo(   () => {
     );
 })
 
-export default App;
+export default App;*/

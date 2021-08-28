@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+/*
 import {taskAPI} from "../api/task-api";
 
 export default {
@@ -78,3 +79,4 @@ export const UpdateTask = () => {
 
   return <div> {JSON.stringify(state)}</div>
 }
+*/

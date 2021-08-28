@@ -1,9 +1,7 @@
 import React, {ChangeEvent, useCallback} from 'react';
 import {
-  changeTaskStatusAC,
-  changeTitleTaskAC,
-  removeTaskAC,
-  TaskType
+  updateTaskStatusTC,
+  removeTaskTC, updateTaskTitleTC,
 } from "./store/tasks-reducer";
 import {Checkbox, IconButton} from "@material-ui/core";
 import EditableSpan from "./components/EditableSpan";
@@ -11,45 +9,49 @@ import {Delete} from "@material-ui/icons";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./store/store";
 import './App.css';
+import {TaskType, TaskStatuses} from "./api/todolist-api";
 
 export type TaskWithReduxType = {
-  todoListID: string
-  taskID: string
+  todolistId: string
+  taskId: string
 }
 
 export const Task = React.memo(function (props: TaskWithReduxType) {
 
-  console.log('task')
-
-  let task = useSelector<AppRootStateType, TaskType>(state => state.tasks[props.todoListID]
-    .filter(tasks => tasks.id === props.taskID)[0])
+  let task = useSelector<AppRootStateType, TaskType>(state => state.tasks[props.todolistId]
+    .filter(tasks => tasks.id === props.taskId)[0])
   const dispatch = useDispatch()
 
+
   const removeTask = useCallback(() => {
-    //создаем экшн и диспатчим его через юзредюсер в редюсер таски
-    const action = removeTaskAC(task.id, props.todoListID)
-    dispatch(action)
-  }, [dispatch])
+    const thunk = removeTaskTC(props.todolistId, task.id)
+    dispatch(thunk)
+  }, [])
 
-  const changeTitleTask = useCallback((title: string) => {
-    //создаем экшн и диспатчим его через юзредюсер в редюсер таски
-    const action = changeTitleTaskAC(props.todoListID, task.id, title)
-    dispatch(action)
-  }, [dispatch])
+  const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    if (e.currentTarget.checked) {
+      const thunk = updateTaskStatusTC (props.todolistId, task.id, TaskStatuses.Completed)
+      dispatch(thunk)
+    }
+    else {
+      const thunk = updateTaskStatusTC (props.todolistId, task.id, TaskStatuses.New)
+      dispatch(thunk)
+    }
+  }, [])
 
-  const isDoneTask = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    //создаем экшн и диспатчим его через юзредюсер в редюсер таски
-    const action = changeTaskStatusAC(task.id, !task.isDone, props.todoListID)
-    dispatch(action)
-  }, [dispatch])
+  const changeTaskTitle = useCallback((title: string) => {
+    const thunk = updateTaskTitleTC(props.todolistId, task.id, title)
+    dispatch(thunk)
+  }, [])
+
 
   return (
-    <div key={task.id} className={task.isDone === true ? 'is-done' : ''}>
+    <div key={task.id} className={task.status === TaskStatuses.Completed ? 'is-done' : ''}>
 
-      <Checkbox onChange={isDoneTask}
-        checked={task.isDone}
+      <Checkbox onChange={onChangeHandler}
+        checked={task.status === TaskStatuses.Completed}
         color={'primary'}></Checkbox>
-      <EditableSpan title={task.title} changeTitleTask={changeTitleTask}/>
+      <EditableSpan title={task.title} changeTitleTask={changeTaskTitle}/>
       <IconButton
         onClick={removeTask}
         color={'primary'}

@@ -1,84 +1,85 @@
-import React, {useCallback} from 'react';
-
+import React, {useCallback, useEffect} from 'react';
 import './App.css';
-
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./store/store";
-import {AddTodoListAC} from "./store/todolists-reducer";
-
-import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
+import {
+  addTodolistTC,
+  fetchTodolistsTC,
+  TodolistDomainType
+} from "./store/todolists-reducer";
+import {
+  AppBar,
+  Button,
+  Container,
+  Grid,
+  IconButton,
+  Paper,
+  Toolbar,
+  Typography
+} from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
-
 import {AddItemForm} from "./components/AddItemForm";
 import {Todolist} from "./Todolist";
+import {TaskType} from "./api/todolist-api";
 
-export type FilterValuesType = "all" | "active" | "completed";
-
-export type TodoListType = {
-    id: string
-    title: string
-    filter: FilterValuesType
-}
-
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
 
 export type TasksStateType = {
-    [key: string]: Array<TaskType>
+  [key: string]: Array<TaskType>
 }
 
-const App  = React.memo(   () => {
+const App = React.memo(() => {
 
-    console.log('app')
-
-    let todoLists = useSelector<AppRootStateType, Array<TodoListType>>(state => state.todolists)
-    const dispatch = useDispatch()
+  let todoLists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
+  const dispatch = useDispatch()
 
 
-    const addTodoList = useCallback((title: string) => {
-        //создаем экшн и диспатчим его через юзредюсер в редюсер тудулиста
-        const action = AddTodoListAC(title)
-        dispatch(action)
-    }, [])
+  useEffect(() => {
+    dispatch(fetchTodolistsTC())
+  }, [])
 
-    const todoListsComponents = todoLists.map(tl => {
-        return (
-            <Grid item key={tl.id}>
-                <Paper style={{padding: '10px'}} elevation={4}>
-                    <Todolist todoListID={tl.id}/>
-                </Paper>
-            </Grid>
-        )
-    })
 
+  const addTodolist = useCallback((title: string) => {
+    const thunk = addTodolistTC(title)
+    dispatch(thunk)
+  }, [])
+
+  const todoListsComponents = todoLists.map(tl => {
     return (
-        <div className="App">
-            <AppBar position='static'>
-                <Toolbar style={{justifyContent: 'space-between'}}>
-                    <IconButton edge='start' color='inherit' aria-label='menu'>
-                        <Menu/>
-                    </IconButton>
-                    <Typography variant='h6'>
-                        Todolists AppWithReduxOne TodolistTwo1
-                    </Typography>
-                    <Button variant='outlined'
-                            color='inherit'>Login</Button>
-                </Toolbar>
-            </AppBar>
+      <Grid item key={tl.id}>
+        <Paper style={{padding: '10px'}} elevation={4}>
+          <Todolist todolistId={tl.id}/>
+        </Paper>
+      </Grid>
+    )
+  })
 
-            <Container fixed>
-                <Grid container style={{padding: '20px 0'}}>
-                    <AddItemForm addItem={addTodoList}/>
-                </Grid>
-                <Grid container spacing={2}>
-                    {todoListsComponents}
-                </Grid>
-            </Container>
-        </div>
-    );
+  return (
+    <div className="App">
+      <AppBar position='static'>
+        <Toolbar style={{justifyContent: 'space-between'}}>
+          <IconButton edge='start' color='inherit' aria-label='menu'>
+            <Menu/>
+          </IconButton>
+          <Typography variant='h6'>
+            Todolists with Thunk and Server API
+          </Typography>
+          <Button
+            variant='outlined'
+            color='inherit'
+          >Login</Button>
+        </Toolbar>
+      </AppBar>
+
+      <Container fixed>
+        <Grid container style={{padding: '20px 0'}}>
+          <AddItemForm addItem={addTodolist}/>
+        </Grid>
+        <Grid container spacing={2}>
+          {todoListsComponents}
+        </Grid>
+      </Container>
+    </div>
+  );
 })
 
 export default App;
