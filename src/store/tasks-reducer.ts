@@ -1,11 +1,10 @@
 import {TasksStateType} from '../App';
-import {v1} from 'uuid';
 import {
   AddTodolistAT,
   RemoveTodolistAT,
   SetTodolistsAT
 } from './todolists-reducer';
-import {TaskPriorities, TaskStatuses, TaskType, todolistsAPI} from '../api/todolist-api'
+import {TaskStatuses, TaskType, todolistsAPI} from '../api/todolist-api'
 import { Dispatch } from 'redux';
 import {AppRootStateType} from "./store";
 

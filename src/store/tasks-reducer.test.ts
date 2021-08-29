@@ -1,10 +1,12 @@
-import {
+import React from 'react'
+/*import {
     removeTaskAC,
     tasksReducer,
     addTaskAC,
     changeTaskStatusAC,
     changeTitleTaskAC,
-} from './tasks-reducer';
+} from './tasks-reducer';*/
+/*
 import {TasksStateType} from '../OLD/App';
 import {AddTodoListAC, RemoveTodoListAC} from './todolists-reducer';
 
@@ -119,6 +121,7 @@ test('property with todolistId should be deleted', () => {
 });
 
 
+*/
 
 
 

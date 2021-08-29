@@ -1,7 +1,6 @@
-import {TaskType, todolistsAPI, TodolistType} from '../api/todolist-api'
+import {todolistsAPI, TodolistType} from '../api/todolist-api'
 import {Dispatch} from "redux";
 import {AppRootStateType} from "./store";
-import {changeTaskTitleAC} from "./tasks-reducer";
 
 export type FilterValuesType = "all" | "active" | "completed";
 
@@ -63,7 +62,6 @@ const initialState: Array<TodolistDomainType> = [
   /*{id: todolistId1, title: 'What to learn', filter: 'all', addedDate: '', order: 0},
   {id: todolistId2, title: 'What to buy', filter: 'all', addedDate: '', order: 0}*/
 ]
-
 /*type initialStateType = typeof initialState*/
 
 export const todolistsReducer = (state: Array<TodolistDomainType> = initialState, action: actionsType): Array<TodolistDomainType> => {
@@ -80,43 +78,24 @@ export const todolistsReducer = (state: Array<TodolistDomainType> = initialState
     }
 
     case "CHANGE-TODOLIST-TITLE": {
-      const todolist = state.find(tl => tl.id === action.todolistId);
-      if (todolist) {
-        // если нашёлся - изменим ему заголовок
-        todolist.title = action.title;
-      }
-      return [...state]
-
-
-
-
-      let todolistTasks = state[action.todolistId];
-      // найдём нужную таску:
-      let newTasksArray = todolistTasks
-        .map(t => t.id === action.taskId ? { ...t, title: action.title } : t);
-
-      state[action.todolistId] = newTasksArray;
-      return ({...state});
-
-
-
+      const stateCopy = state.map((tl:TodolistDomainType) => {
+        return (
+          tl.id === action.todolistId ? {...tl, title: action.title} : tl
+        )
+      })
+      return stateCopy
     }
 
     case "CHANGE-TODOLIST-FILTER": {
-      const todolist = state.find(tl => tl.id === action.todolistId);
-      if (todolist) {
-        // если нашёлся - изменим ему заголовок
-        todolist.filter = action.filter;
-      }
-      return [...state]
+      const stateCopy = state.map((tl:TodolistDomainType) => {
+        return (
+          tl.id === action.todolistId ? {...tl, filter: action.filter} : tl
+        )
+      })
+      return stateCopy
     }
 
     case "SET-TODOLISTS": {
-      /*            let newTodos: Array<TodolistDomainType> = action.todos.map((tl)=>{
-                      return {...tl, filter: 'all'}
-                  })
-                  return [...state, ...newTodos]*/
-
       return action.todolists.map((tl: TodolistType)=>{
         return {...tl, filter: 'all'}
       })

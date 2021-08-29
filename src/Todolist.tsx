@@ -129,8 +129,3 @@ export const Todolist: FC<PropsType> = React.memo(({
   )
 })
 
-{/*{tasksForTodolist.map((t) => {*/}
-{/*  return <div key={t.id}>*/}
-{/*    <Task todoListID={props.todoListID} taskID={t.id}/>*/}
-{/*  </div>*/}
-{/*})}*/}
