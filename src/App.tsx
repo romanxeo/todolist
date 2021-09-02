@@ -21,6 +21,11 @@ import {Menu} from "@material-ui/icons";
 import {AddItemForm} from "./components/AddItemForm";
 import {Todolist} from "./Todolist";
 import {TaskType} from "./api/todolist-api";
+import { RequestStatusType } from './store/app-reducer';
+
+//vo tka nado importirovat'!!!!!!!!!!!!
+import LinearProgress from '@material-ui/core/LinearProgress'
+import { ErrorSnackbar } from './components/ErrorSnackbar';
 
 
 export type TasksStateType = {
@@ -29,6 +34,7 @@ export type TasksStateType = {
 
 const App = React.memo(() => {
 
+  let status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
   let todoLists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
   const dispatch = useDispatch()
 
@@ -55,6 +61,7 @@ const App = React.memo(() => {
 
   return (
     <div className="App">
+      <ErrorSnackbar />
       <AppBar position='static'>
         <Toolbar style={{justifyContent: 'space-between'}}>
           <IconButton edge='start' color='inherit' aria-label='menu'>
@@ -68,6 +75,7 @@ const App = React.memo(() => {
             color='inherit'
           >Login</Button>
         </Toolbar>
+        {status === 'loading' && <LinearProgress color={"secondary"}/>}
       </AppBar>
 
       <Container fixed>

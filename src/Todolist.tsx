@@ -99,12 +99,13 @@ export const Todolist: FC<PropsType> = React.memo(({
           onClick={removeTodolist}
           color={'primary'}
           size={'small'}
-          style={{color: '#444444'}}
+          /*style={{color: '#444444'}}*/
+          disabled={todolist.entityStatus === 'loading'}
         >
           <Delete/>
         </IconButton>
       </h3>
-      <AddItemForm addItem={addTask}/>
+      <AddItemForm addItem={addTask} entityStatus={todolist.entityStatus}/>
 
       {renderTasks()}
 
