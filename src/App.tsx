@@ -34,7 +34,7 @@ export type TasksStateType = {
 
 const App = React.memo(() => {
 
-  let status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
+  let status = useSelector<AppRootStateType, number>(state => state.app.status)
   let todoLists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
   const dispatch = useDispatch()
 
@@ -75,8 +75,10 @@ const App = React.memo(() => {
             color='inherit'
           >Login</Button>
         </Toolbar>
-        {status === 'loading' && <LinearProgress color={"secondary"}/>}
       </AppBar>
+      <div className='loadingStyle'>
+        {status !== 0 && <LinearProgress color={"secondary"}/>}
+      </div>
 
       <Container fixed>
         <Grid container style={{padding: '20px 0'}}>

@@ -1,7 +1,7 @@
 import {todolistsAPI, TodolistType} from '../api/todolist-api'
 import {Dispatch} from "redux";
 import {AppRootStateType} from "./store";
-import {RequestStatusType, setAppErrorAC, setLoadingStatusAC} from "./app-reducer";
+import {RequestStatusType, setLoadingStatusAC, setLoadingStatusAT, setAppErrorAT} from "./app-reducer";
 import {AxiosError} from "axios";
 import {
   handleServerAppError,
@@ -68,6 +68,8 @@ export type actionsType = AddTodolistAT
   | ChangeTodolistFilterAT
   | SetTodolistsAT
   | changeTodolistEntityStatusAT
+  | setLoadingStatusAT
+  | setAppErrorAT
 
 export type TodolistDomainType = TodolistType & {
   filter: FilterValuesType,
@@ -135,41 +137,47 @@ export const todolistsReducer = (state: Array<TodolistDomainType> = initialState
 //THUNK
 
 export const fetchTodolistsTC = () => {
-  return (dispatch: Dispatch) => {
+  return (dispatch: Dispatch<actionsType>) => {
     dispatch(setLoadingStatusAC('loading'))
     todolistsAPI.getTodolists()
       .then((res) => {
         dispatch(setTodolistsAC(res.data))
-        dispatch(setLoadingStatusAC('succeeded'))
+        dispatch(setLoadingStatusAC('idle'))
+      })
+      .catch((err: AxiosError) => {
+        handleServerNetworkError(dispatch, err.message)
       })
   }
 }
 
 export const addTodolistTC = (title: string) => {
 
-  return (dispatch: Dispatch) => {
+  return (dispatch: Dispatch<actionsType>) => {
     dispatch(setLoadingStatusAC('loading'))
     todolistsAPI.createTodolist(title)
       .then(res => {
         if (res.data.resultCode === 0) {
           dispatch(addTodolistAC(res.data.data.item))
-          dispatch(setLoadingStatusAC('succeeded'))
+          dispatch(setLoadingStatusAC('idle'))
         } else {
           handleServerAppError<{item: TodolistType}>(dispatch, res.data)
         }
+      })
+      .catch((err: AxiosError) => {
+        handleServerNetworkError(dispatch, err.message)
       })
   }
 }
 
 export const removeTodolistTC = (todolistId: string) => {
-  return (dispatch: Dispatch) => {
+  return (dispatch: Dispatch<actionsType>) => {
     dispatch(setLoadingStatusAC('loading'))
     dispatch(changeTodolistEntityStatusAC(todolistId, 'loading'))
     todolistsAPI.deleteTodolist(todolistId)
       .then(res => {
         if (res.data.resultCode === 0) {
           dispatch(removeTodolistAC(todolistId))
-          dispatch(setLoadingStatusAC('succeeded'))
+          dispatch(setLoadingStatusAC('idle'))
         } else {
           handleServerAppError(dispatch, res.data)
         }
@@ -181,7 +189,7 @@ export const removeTodolistTC = (todolistId: string) => {
 }
 
 export const updateTodolistTitleTC = (todolistId: string, title: string) => {
-  return (dispatch: Dispatch, getState: () => AppRootStateType) => {
+  return (dispatch: Dispatch<actionsType>, getState: () => AppRootStateType) => {
 
 // так как мы обязаны на сервер отправить все св-ва, которые сервер ожидает,
 // а не только те, которые мы хотим обновить, соответственно нам нужно в этом месте взять
@@ -194,11 +202,15 @@ export const updateTodolistTitleTC = (todolistId: string, title: string) => {
 
     if (todolist) {
       dispatch(setLoadingStatusAC('loading'))
-      todolistsAPI.updateTodolist(todolistId, title).then(() => {
-        const action = changeTodolistTitleAC(todolistId, title)
-        dispatch(action)
-        dispatch(setLoadingStatusAC('succeeded'))
-      })
+      todolistsAPI.updateTodolist(todolistId, title)
+        .then(() => {
+          const action = changeTodolistTitleAC(todolistId, title)
+          dispatch(action)
+          dispatch(setLoadingStatusAC('idle'))
+        })
+        .catch((err: AxiosError) => {
+          handleServerNetworkError(dispatch, err.message)
+        })
     }
   }
 }

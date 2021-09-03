@@ -8,11 +8,15 @@ import {
   TaskStatuses,
   TaskType,
   todolistsAPI,
-  TodolistType
 } from '../api/todolist-api'
-import { Dispatch } from 'redux';
+import {Dispatch} from 'redux';
 import {AppRootStateType} from "./store";
-import {setAppErrorAC, setLoadingStatusAC} from "./app-reducer";
+import {
+  setAppErrorAT,
+  setLoadingStatusAC,
+  setLoadingStatusAT,
+  actionAppType
+} from "./app-reducer";
 import {AxiosError} from "axios";
 import {
   handleServerAppError,
@@ -76,6 +80,8 @@ export type actionsType = addTaskAT
   | RemoveTodolistAT
   | SetTodolistsAT
   | setTasksAT
+  | setLoadingStatusAT
+  | setAppErrorAT
 
 const initialState: TasksStateType = {
   /*"todolistId1": [
@@ -123,7 +129,7 @@ export const tasksReducer = (state: TasksStateType = initialState, action: actio
     case "CHANGE-TASK-STATUS": {
       let todolistTasks = state[action.todolistId];
       let newTasksArray = todolistTasks
-        .map(t => t.id === action.taskId ? { ...t, status: action.status } : t);
+        .map(t => t.id === action.taskId ? {...t, status: action.status} : t);
 
       state[action.todolistId] = newTasksArray;
       return ({...state});
@@ -133,7 +139,7 @@ export const tasksReducer = (state: TasksStateType = initialState, action: actio
       let todolistTasks = state[action.todolistId];
       // найдём нужную таску:
       let newTasksArray = todolistTasks
-        .map(t => t.id === action.taskId ? { ...t, title: action.title } : t);
+        .map(t => t.id === action.taskId ? {...t, title: action.title} : t);
 
       state[action.todolistId] = newTasksArray;
       return ({...state});
@@ -174,28 +180,31 @@ export const tasksReducer = (state: TasksStateType = initialState, action: actio
 //THUNK
 
 export const fetchTasksTC = (todolistId: string) => {
-  return (dispatch: Dispatch) => {
+  return (dispatch: Dispatch<actionsType>) => {
     dispatch(setLoadingStatusAC('loading'))
     todolistsAPI.getTasks(todolistId)
       .then((res) => {
         const tasks = res.data.items
         const action = setTasksAC(todolistId, tasks)
         dispatch(action)
-        dispatch(setLoadingStatusAC('succeeded'))
+        dispatch(setLoadingStatusAC('idle'))
+      })
+      .catch((err: AxiosError) => {
+        handleServerNetworkError(dispatch, err.message)
       })
   }
 }
 
 export const addTaskTC = (todolistId: string, title: string) => {
-  return (dispatch: Dispatch) => {
+  return (dispatch: Dispatch<actionsType>) => {
     dispatch(setLoadingStatusAC('loading'))
     todolistsAPI.createTask(todolistId, title)
       .then(res => {
         if (res.data.resultCode === 0) {
           dispatch(addTaskAC(res.data.data.item))
-          dispatch(setLoadingStatusAC('succeeded'))
+          dispatch(setLoadingStatusAC('idle'))
         } else {
-          handleServerAppError<{item: TaskType}>(dispatch, res.data)
+          handleServerAppError<{ item: TaskType }>(dispatch, res.data)
         }
       })
       .catch((err: AxiosError) => {
@@ -203,27 +212,26 @@ export const addTaskTC = (todolistId: string, title: string) => {
       })
 
 
-
-
-
-
   }
 }
 
 export const removeTaskTC = (todolistId: string, taskId: string) => {
-  return (dispatch: Dispatch) => {
+  return (dispatch: Dispatch<actionsType>) => {
     dispatch(setLoadingStatusAC('loading'))
     todolistsAPI.deleteTask(todolistId, taskId)
       .then(res => {
         const action = removeTaskAC(todolistId, taskId)
         dispatch(action)
-        dispatch(setLoadingStatusAC('succeeded'))
+        dispatch(setLoadingStatusAC('idle'))
+      })
+      .catch((err: AxiosError) => {
+        handleServerNetworkError(dispatch, err.message)
       })
   }
 }
 
 export const updateTaskStatusTC = (todolistId: string, taskId: string, status: TaskStatuses) => {
-  return (dispatch: Dispatch, getState: () => AppRootStateType) => {
+  return (dispatch: Dispatch<actionsType>, getState: () => AppRootStateType) => {
 
 // так как мы обязаны на сервер отправить все св-ва, которые сервер ожидает,
 // а не только те, которые мы хотим обновить, соответственно нам нужно в этом месте взять
@@ -244,17 +252,21 @@ export const updateTaskStatusTC = (todolistId: string, taskId: string, status: T
         description: task.description,
         deadline: task.deadline,
         status: status
-      }).then(() => {
-        const action = changeTaskStatusAC(todolistId, taskId, status)
-        dispatch(action)
-        dispatch(setLoadingStatusAC('succeeded'))
       })
+        .then(() => {
+          const action = changeTaskStatusAC(todolistId, taskId, status)
+          dispatch(action)
+          dispatch(setLoadingStatusAC('idle'))
+        })
+        .catch((err: AxiosError) => {
+          handleServerNetworkError(dispatch, err.message)
+        })
     }
   }
 }
 
 export const updateTaskTitleTC = (todolistId: string, taskId: string, title: string) => {
-  return (dispatch: Dispatch, getState: () => AppRootStateType) => {
+  return (dispatch: Dispatch<actionsType>, getState: () => AppRootStateType) => {
 
 // так как мы обязаны на сервер отправить все св-ва, которые сервер ожидает,
 // а не только те, которые мы хотим обновить, соответственно нам нужно в этом месте взять
@@ -275,11 +287,15 @@ export const updateTaskTitleTC = (todolistId: string, taskId: string, title: str
         description: task.description,
         deadline: task.deadline,
         status: task.status
-      }).then(() => {
-        const action = changeTaskTitleAC(todolistId, taskId, title)
-        dispatch(action)
-        dispatch(setLoadingStatusAC('succeeded'))
       })
+        .then(() => {
+          const action = changeTaskTitleAC(todolistId, taskId, title)
+          dispatch(action)
+          dispatch(setLoadingStatusAC('idle'))
+        })
+        .catch((err: AxiosError) => {
+          handleServerNetworkError(dispatch, err.message)
+        })
     }
   }
 }

@@ -26,3 +26,7 @@
   /*opacity: 0.5;*/
   color: #BBBBBB;
 }
+
+.loadingStyle {
+  height: 5px;
+}
