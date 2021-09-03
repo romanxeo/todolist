@@ -1,7 +1,13 @@
 import {todolistsAPI, TodolistType} from '../api/todolist-api'
 import {Dispatch} from "redux";
 import {AppRootStateType} from "./store";
-import {RequestStatusType, setLoadingStatusAC, setLoadingStatusAT, setAppErrorAT} from "./app-reducer";
+import {
+  RequestStatusType,
+  setLoadingStatusAC,
+  setLoadingStatusAT,
+  setAppErrorAT,
+  setAppErrorAC
+} from "./app-reducer";
 import {AxiosError} from "axios";
 import {
   handleServerAppError,
@@ -144,8 +150,8 @@ export const fetchTodolistsTC = () => {
         dispatch(setTodolistsAC(res.data))
         dispatch(setLoadingStatusAC('idle'))
       })
-      .catch((err: AxiosError) => {
-        handleServerNetworkError(dispatch, err.message)
+      .catch(err => {
+        handleServerNetworkError(dispatch, err)
       })
   }
 }
@@ -163,8 +169,8 @@ export const addTodolistTC = (title: string) => {
           handleServerAppError<{item: TodolistType}>(dispatch, res.data)
         }
       })
-      .catch((err: AxiosError) => {
-        handleServerNetworkError(dispatch, err.message)
+      .catch(err => {
+        handleServerNetworkError(dispatch, err)
       })
   }
 }
@@ -182,8 +188,8 @@ export const removeTodolistTC = (todolistId: string) => {
           handleServerAppError(dispatch, res.data)
         }
       })
-      .catch((err: AxiosError) => {
-        handleServerNetworkError(dispatch, err.message)
+      .catch(err => {
+        handleServerNetworkError(dispatch, err)
       })
   }
 }
@@ -203,13 +209,18 @@ export const updateTodolistTitleTC = (todolistId: string, title: string) => {
     if (todolist) {
       dispatch(setLoadingStatusAC('loading'))
       todolistsAPI.updateTodolist(todolistId, title)
-        .then(() => {
-          const action = changeTodolistTitleAC(todolistId, title)
-          dispatch(action)
-          dispatch(setLoadingStatusAC('idle'))
+        .then((res) => {
+          if (res.data.resultCode === 0) {
+            const action = changeTodolistTitleAC(todolistId, title)
+            dispatch(action)
+            dispatch(setLoadingStatusAC('idle'))
+          }
+          else {
+            handleServerAppError(dispatch, res.data)
+          }
         })
-        .catch((err: AxiosError) => {
-          handleServerNetworkError(dispatch, err.message)
+        .catch(err => {
+          handleServerNetworkError(dispatch, err)
         })
     }
   }

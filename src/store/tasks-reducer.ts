@@ -7,7 +7,7 @@ import {
 import {
   TaskStatuses,
   TaskType,
-  todolistsAPI,
+  todolistsAPI, TodolistType,
 } from '../api/todolist-api'
 import {Dispatch} from 'redux';
 import {AppRootStateType} from "./store";
@@ -15,7 +15,7 @@ import {
   setAppErrorAT,
   setLoadingStatusAC,
   setLoadingStatusAT,
-  actionAppType
+  actionAppType, setAppErrorAC
 } from "./app-reducer";
 import {AxiosError} from "axios";
 import {
@@ -189,8 +189,8 @@ export const fetchTasksTC = (todolistId: string) => {
         dispatch(action)
         dispatch(setLoadingStatusAC('idle'))
       })
-      .catch((err: AxiosError) => {
-        handleServerNetworkError(dispatch, err.message)
+      .catch(err => {
+        handleServerNetworkError(dispatch, err)
       })
   }
 }
@@ -207,11 +207,9 @@ export const addTaskTC = (todolistId: string, title: string) => {
           handleServerAppError<{ item: TaskType }>(dispatch, res.data)
         }
       })
-      .catch((err: AxiosError) => {
-        handleServerNetworkError(dispatch, err.message)
+      .catch(err => {
+        handleServerNetworkError(dispatch, err)
       })
-
-
   }
 }
 
@@ -220,12 +218,17 @@ export const removeTaskTC = (todolistId: string, taskId: string) => {
     dispatch(setLoadingStatusAC('loading'))
     todolistsAPI.deleteTask(todolistId, taskId)
       .then(res => {
-        const action = removeTaskAC(todolistId, taskId)
-        dispatch(action)
-        dispatch(setLoadingStatusAC('idle'))
+        if (res.data.resultCode === 0) {
+          const action = removeTaskAC(todolistId, taskId)
+          dispatch(action)
+          dispatch(setLoadingStatusAC('idle'))
+        }
+        else {
+          handleServerAppError(dispatch, res.data)
+        }
       })
-      .catch((err: AxiosError) => {
-        handleServerNetworkError(dispatch, err.message)
+      .catch(err => {
+        handleServerNetworkError(dispatch, err)
       })
   }
 }
@@ -253,13 +256,18 @@ export const updateTaskStatusTC = (todolistId: string, taskId: string, status: T
         deadline: task.deadline,
         status: status
       })
-        .then(() => {
-          const action = changeTaskStatusAC(todolistId, taskId, status)
-          dispatch(action)
-          dispatch(setLoadingStatusAC('idle'))
+        .then(res => {
+          if (res.data.resultCode === 0) {
+            const action = changeTaskStatusAC(todolistId, taskId, status)
+            dispatch(action)
+            dispatch(setLoadingStatusAC('idle'))
+          }
+          else {
+            handleServerAppError(dispatch, res.data)
+          }
         })
-        .catch((err: AxiosError) => {
-          handleServerNetworkError(dispatch, err.message)
+        .catch(err => {
+          handleServerNetworkError(dispatch, err)
         })
     }
   }
@@ -288,13 +296,17 @@ export const updateTaskTitleTC = (todolistId: string, taskId: string, title: str
         deadline: task.deadline,
         status: task.status
       })
-        .then(() => {
-          const action = changeTaskTitleAC(todolistId, taskId, title)
-          dispatch(action)
-          dispatch(setLoadingStatusAC('idle'))
+        .then((res) => {
+          if (res.data.resultCode === 0) {
+            const action = changeTaskTitleAC(todolistId, taskId, title)
+            dispatch(action)
+            dispatch(setLoadingStatusAC('idle'))
+          } else {
+            handleServerAppError(dispatch, res.data)
+          }
         })
-        .catch((err: AxiosError) => {
-          handleServerNetworkError(dispatch, err.message)
+        .catch(err => {
+          handleServerNetworkError(dispatch, err)
         })
     }
   }
