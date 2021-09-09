@@ -9,7 +9,7 @@ import {
 } from "./store/todolists-reducer";
 import {
   AppBar,
-  Button,
+  Button, CircularProgress,
   Container,
   Grid,
   IconButton,
@@ -21,11 +21,14 @@ import {Menu} from "@material-ui/icons";
 import {AddItemForm} from "./components/AddItemForm";
 import {Todolist} from "./Todolist";
 import {TaskType} from "./api/todolist-api";
-import { RequestStatusType } from './store/app-reducer';
+import {initializeAppTC, RequestStatusType} from './store/app-reducer';
 
 //vo tka nado importirovat'!!!!!!!!!!!!
 import LinearProgress from '@material-ui/core/LinearProgress'
 import { ErrorSnackbar } from './components/ErrorSnackbar';
+import { Login } from './login/login';
+import {Redirect, Route, Switch } from 'react-router-dom';
+import {TodolistsList} from "./TodolistList";
 
 
 export type TasksStateType = {
@@ -35,21 +38,32 @@ export type TasksStateType = {
 const App = React.memo(() => {
 
   let status = useSelector<AppRootStateType, number>(state => state.app.status)
-  let todoLists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
+  let isInitialized = useSelector<AppRootStateType, boolean>(state => state.app.isInitialized)
+  /*let todoLists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)*/
+  /*const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)*/
   const dispatch = useDispatch()
 
-
   useEffect(() => {
-    dispatch(fetchTodolistsTC())
+    dispatch(initializeAppTC())
   }, [])
 
+  if (!isInitialized) {
+    return <div
+      style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+      <CircularProgress/>
+    </div>
+  }
 
-  const addTodolist = useCallback((title: string) => {
+
+
+  /*useEffect(() => {
+    dispatch(fetchTodolistsTC())
+  }, [])*/
+  /*const addTodolist = useCallback((title: string) => {
     const thunk = addTodolistTC(title)
     dispatch(thunk)
-  }, [])
-
-  const todoListsComponents = todoLists.map(tl => {
+  }, [])*/
+  /*const todoListsComponents = todoLists.map(tl => {
     return (
       <Grid item key={tl.id}>
         <Paper style={{padding: '10px'}} elevation={4}>
@@ -57,7 +71,10 @@ const App = React.memo(() => {
         </Paper>
       </Grid>
     )
-  })
+  })*/
+  /*if (!isLoggedIn) {
+    return <Redirect to={ '/login' } />
+  }*/
 
   return (
     <div className="App">
@@ -81,12 +98,14 @@ const App = React.memo(() => {
       </div>
 
       <Container fixed>
-        <Grid container style={{padding: '20px 0'}}>
-          <AddItemForm addItem={addTodolist}/>
-        </Grid>
-        <Grid container spacing={2}>
-          {todoListsComponents}
-        </Grid>
+
+        <Switch>
+          <Route exact path={'/'} render={() => <TodolistsList/>} />
+          <Route path={'/login'} render={() => <Login />} />
+          <Route path={ '/404' } render={ () => <h1 style={{textAlign: 'center', fontSize: '48px'}}>404: PAGE NOT FOUND</h1> }/>
+          <Redirect from={'*'} to={ '/404' } />
+        </Switch>
+
       </Container>
     </div>
   );
