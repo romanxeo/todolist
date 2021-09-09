@@ -6,7 +6,8 @@ import {
   setLoadingStatusAC,
   setLoadingStatusAT,
   setAppErrorAT,
-  setAppErrorAC
+  setAppErrorAC,
+  actionAppType
 } from "./app-reducer";
 import {AxiosError} from "axios";
 import {
@@ -75,7 +76,7 @@ export type actionsType = AddTodolistAT
   | SetTodolistsAT
   | changeTodolistEntityStatusAT
   | setLoadingStatusAT
-  | setAppErrorAT
+  | setAppErrorAT | actionAppType
 
 export type TodolistDomainType = TodolistType & {
   filter: FilterValuesType,

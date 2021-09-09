@@ -81,7 +81,7 @@ export type actionsType = addTaskAT
   | SetTodolistsAT
   | setTasksAT
   | setLoadingStatusAT
-  | setAppErrorAT
+  | setAppErrorAT | actionAppType
 
 const initialState: TasksStateType = {
   /*"todolistId1": [
@@ -311,10 +311,5 @@ export const updateTaskTitleTC = (todolistId: string, taskId: string, title: str
     }
   }
 }
-
-
-
-
-
 
 
