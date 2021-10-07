@@ -1,5 +1,5 @@
 import {Dispatch} from "redux";
-import {setIsLoggedInAC, setIsLoggedInAT} from "./authReducer";
+import {setIsLoggedInAC, setIsLoggedInAT} from "./auth-reducer";
 import {authAPI} from "../api/todolist-api";
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'

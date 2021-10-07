@@ -1,7 +1,7 @@
 import React from 'react'
 import {Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, TextField, Button, Grid} from '@material-ui/core'
 import {useFormik} from "formik";
-import {loginTC} from "../store/authReducer";
+import {loginTC} from "../store/auth-reducer";
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from "../store/store";
 import {Redirect} from "react-router-dom";
@@ -70,14 +70,14 @@ export const Login = () => {
               margin="normal"
               {...formik.getFieldProps('email')}
             />
-            {formik.touched.email && formik.errors.email && <div>{formik.errors.email}</div>}
+            {formik.touched.email && formik.errors.email && <div style={{color: 'red'}}>{formik.errors.email}</div>}
 
             <TextField
               type="password"
               label="Password"
               {...formik.getFieldProps('password')}
             />
-            {formik.touched.password && formik.errors.password && <div>{formik.errors.password}</div>}
+            {formik.touched.password && formik.errors.password && <div style={{color: 'red'}}>{formik.errors.password}</div>}
 
             <FormControlLabel
               label={'Remember me'}

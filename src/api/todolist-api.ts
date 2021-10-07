@@ -27,6 +27,7 @@ export enum TaskStatuses {
   Completed = 2,
   Draft = 3
 }
+
 export enum TaskPriorities {
   Low = 0,
   Middle = 1,
@@ -85,7 +86,7 @@ export const todolistsAPI = {
     return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`);
   },
   createTask(todolistId: string, taskTitle: string) {
-    return instance.post<ResponseType<{item: TaskType}>>(`todo-lists/${todolistId}/tasks`, {title: taskTitle});
+    return instance.post<ResponseType<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks`, {title: taskTitle});
   },
   deleteTask(todolistId: string, taskId: string) {
     return instance.delete<ResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`);
@@ -110,9 +111,12 @@ export type myData = {
 
 export const authAPI = {
   login(payload: LoginParamsType) {
-    return instance.post<ResponseType<{userId: number}>>(`auth/login`, payload);
+    return instance.post<ResponseType<{ userId: number }>>(`auth/login`, payload);
   },
   me() {
     return instance.get<ResponseType<myData>>(`auth/me`)
+  },
+  logout() {
+    return instance.delete<ResponseType<any>>(`auth/login`);
   }
 }

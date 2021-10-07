@@ -56,3 +56,21 @@ export const loginTC = (payload: LoginParamsType) => {
       })
   }
 }
+
+export const logoutTC = () => {
+  return (dispatch: Dispatch<actionAppType>) => {
+    dispatch(setLoadingStatusAC('loading'))
+    authAPI.logout()
+      .then(res => {
+        if (res.data.resultCode === 0) {
+          dispatch(setIsLoggedInAC(false))
+          dispatch(setLoadingStatusAC('idle'))
+        } else {
+          handleServerAppError<{ userId: number }>(dispatch, res.data)
+        }
+      })
+      .catch(err => {
+        handleServerNetworkError(dispatch, err)
+      })
+  }
+}

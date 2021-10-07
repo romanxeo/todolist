@@ -19,11 +19,13 @@ export const Buttons = React.memo(function (props: PropsType) {
 
   return (
     <>
-      <Button size={'small'}
-              variant={'contained'}
-              color={props.filter === props.value ? 'secondary' : 'primary'}
-              onClick={() => onFilterClickHandler(props.value)}
-              style={{margin: '10px 2px 0px 2px'}}>
+      <Button
+        size={'small'}
+        variant={'contained'}
+        color={props.filter === props.value ? 'secondary' : 'primary'}
+        onClick={() => onFilterClickHandler(props.value)}
+        style={{margin: '10px 2px 0px 2px'}}
+      >
         {props.value}
       </Button>
     </>
