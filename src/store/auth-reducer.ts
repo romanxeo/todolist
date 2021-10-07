@@ -15,6 +15,7 @@ import {
   handleServerAppError,
   handleServerNetworkError
 } from "../utils/error-utils";
+import {clearTodolistDataAC} from "./todolists-reducer";
 
 // actions
 export const setIsLoggedInAC = (value: boolean) => ({type: 'login/SET-IS-LOGGED-IN', value} as const)
@@ -63,6 +64,7 @@ export const logoutTC = () => {
     authAPI.logout()
       .then(res => {
         if (res.data.resultCode === 0) {
+          dispatch(clearTodolistDataAC())
           dispatch(setIsLoggedInAC(false))
           dispatch(setLoadingStatusAC('idle'))
         } else {

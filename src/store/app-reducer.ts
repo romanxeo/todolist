@@ -1,6 +1,7 @@
 import {Dispatch} from "redux";
 import {setIsLoggedInAC, setIsLoggedInAT} from "./auth-reducer";
 import {authAPI} from "../api/todolist-api";
+import {clearTodolistDataAT} from "./todolists-reducer";
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 
@@ -30,6 +31,7 @@ export type actionAppType =
   | setAppErrorAT
   | setInitializedAT
   | setIsLoggedInAT
+  | clearTodolistDataAT
 
 export const initialState = {
   status: 0,

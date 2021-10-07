@@ -1,6 +1,6 @@
 import {TasksStateType} from '../App';
 import {
-  AddTodolistAT,
+  AddTodolistAT, clearTodolistDataAT,
   RemoveTodolistAT,
   SetTodolistsAT
 } from './todolists-reducer';
@@ -81,7 +81,9 @@ export type actionsType = addTaskAT
   | SetTodolistsAT
   | setTasksAT
   | setLoadingStatusAT
-  | setAppErrorAT | actionAppType
+  | setAppErrorAT
+  | actionAppType
+  | clearTodolistDataAT
 
 const initialState: TasksStateType = {
   /*"todolistId1": [
@@ -164,6 +166,10 @@ export const tasksReducer = (state: TasksStateType = initialState, action: actio
         stateCopy[tl.id] = []
       })
       return stateCopy;
+    }
+
+    case 'TODOLIST/CLEAR-DATA': {
+      return {};
     }
 
     case 'SET-TASKS': {

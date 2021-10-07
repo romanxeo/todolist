@@ -14,6 +14,7 @@ import {
   handleServerAppError,
   handleServerNetworkError
 } from "../utils/error-utils";
+import {fetchTasksTC, setTasksAC, setTasksAT} from "./tasks-reducer";
 
 export type FilterValuesType = "all" | "active" | "completed";
 
@@ -62,12 +63,19 @@ export const changeTodolistEntityStatusAC = (todolistId: string, entityStatus: R
   } as const
 }
 
+export const clearTodolistDataAC = () => {
+  return {
+    type: 'TODOLIST/CLEAR-DATA'
+  } as const
+}
+
 export type AddTodolistAT = ReturnType<typeof addTodolistAC>
 export type RemoveTodolistAT = ReturnType<typeof removeTodolistAC>
 export type ChangeTodolistTitleAT = ReturnType<typeof changeTodolistTitleAC>
 export type ChangeTodolistFilterAT = ReturnType<typeof changeTodolistFilterAC>
 export type SetTodolistsAT = ReturnType<typeof setTodolistsAC>
 export type changeTodolistEntityStatusAT = ReturnType<typeof changeTodolistEntityStatusAC>
+export type clearTodolistDataAT = ReturnType<typeof clearTodolistDataAC>
 
 export type actionsType = AddTodolistAT
   | RemoveTodolistAT
@@ -76,7 +84,10 @@ export type actionsType = AddTodolistAT
   | SetTodolistsAT
   | changeTodolistEntityStatusAT
   | setLoadingStatusAT
-  | setAppErrorAT | actionAppType
+  | setAppErrorAT
+  | actionAppType
+  | setTasksAT
+  | clearTodolistDataAT
 
 export type TodolistDomainType = TodolistType & {
   filter: FilterValuesType,
@@ -95,7 +106,11 @@ export const todolistsReducer = (state: Array<TodolistDomainType> = initialState
 
     case "TODOLIST/ADD-TODOLIST": {
       const stateCopy = [...state]
-      const newTodolistWithFilter: TodolistDomainType = {...action.todolist, filter: 'all', entityStatus: 'idle'}
+      const newTodolistWithFilter: TodolistDomainType = {
+        ...action.todolist,
+        filter: 'all',
+        entityStatus: 'idle'
+      }
       return [newTodolistWithFilter, ...stateCopy]
     }
 
@@ -104,7 +119,7 @@ export const todolistsReducer = (state: Array<TodolistDomainType> = initialState
     }
 
     case "TODOLIST/CHANGE-TODOLIST-TITLE": {
-      const stateCopy = state.map((tl:TodolistDomainType) => {
+      const stateCopy = state.map((tl: TodolistDomainType) => {
         return (
           tl.id === action.todolistId ? {...tl, title: action.title} : tl
         )
@@ -113,7 +128,7 @@ export const todolistsReducer = (state: Array<TodolistDomainType> = initialState
     }
 
     case "TODOLIST/CHANGE-TODOLIST-FILTER": {
-      const stateCopy = state.map((tl:TodolistDomainType) => {
+      const stateCopy = state.map((tl: TodolistDomainType) => {
         return (
           tl.id === action.todolistId ? {...tl, filter: action.filter} : tl
         )
@@ -122,18 +137,25 @@ export const todolistsReducer = (state: Array<TodolistDomainType> = initialState
     }
 
     case "TODOLIST/SET-TODOLISTS": {
-      return action.todolists.map((tl: TodolistType)=>{
+      return action.todolists.map((tl: TodolistType) => {
         return {...tl, filter: 'all', entityStatus: 'idle'}
       })
     }
 
     case 'TODOLIST/CHANGE-TODOLIST-ENTITY-STATUS': {
-      const stateCopy = state.map((tl:TodolistDomainType) => {
+      const stateCopy = state.map((tl: TodolistDomainType) => {
         return (
-          tl.id === action.todolistId ? {...tl, entityStatus: action.entityStatus} : tl
+          tl.id === action.todolistId ? {
+            ...tl,
+            entityStatus: action.entityStatus
+          } : tl
         )
       })
       return stateCopy
+    }
+
+    case 'TODOLIST/CLEAR-DATA': {
+      return []
     }
 
     default:
@@ -144,13 +166,21 @@ export const todolistsReducer = (state: Array<TodolistDomainType> = initialState
 //THUNK
 
 export const fetchTodolistsTC = () => {
-  return (dispatch: Dispatch<actionsType>) => {
+  return (dispatch: Dispatch<any>) => {
     dispatch(setLoadingStatusAC('loading'))
     todolistsAPI.getTodolists()
       .then((res) => {
         dispatch(setTodolistsAC(res.data))
-        dispatch(setLoadingStatusAC('idle'))
+        return res.data
       })
+      .then((todos) => {
+          todos.forEach((tl) => {
+              dispatch(fetchTasksTC(tl.id))
+            }
+          )
+          dispatch(setLoadingStatusAC('idle'))
+        }
+      )
       .catch(err => {
         handleServerNetworkError(dispatch, err)
       })
@@ -167,7 +197,7 @@ export const addTodolistTC = (title: string) => {
           dispatch(addTodolistAC(res.data.data.item))
           dispatch(setLoadingStatusAC('idle'))
         } else {
-          handleServerAppError<{item: TodolistType}>(dispatch, res.data)
+          handleServerAppError<{ item: TodolistType }>(dispatch, res.data)
         }
       })
       .catch(err => {
@@ -215,8 +245,7 @@ export const updateTodolistTitleTC = (todolistId: string, title: string) => {
             const action = changeTodolistTitleAC(todolistId, title)
             dispatch(action)
             dispatch(setLoadingStatusAC('idle'))
-          }
-          else {
+          } else {
             handleServerAppError(dispatch, res.data)
           }
         })
