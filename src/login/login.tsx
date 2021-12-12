@@ -32,7 +32,7 @@ export const Login = () => {
       }
 
       if (!values.password) {
-        errors.password = 'ПУСТО';
+        errors.password = 'ПУСТО..';
       } else if (values.password.length < 4) {
         errors.password = 'БОЛЬШЕ ТРЕХ СИМВОЛОВ ДОЛЖНО БЫТЬ';
       }
