@@ -100,7 +100,7 @@ const App = React.memo(() => {
           <Route path={'/login'} render={() => <Login/>}/>
           <Route path={'/404'} render={() => <h1
             style={{textAlign: 'center', fontSize: '48px'}}>404: PAGE NOT
-            FOUND</h1>}/>
+            FOUND..</h1>}/>
           <Redirect from={'*'} to={'/404'}/>
         </Switch>
 
